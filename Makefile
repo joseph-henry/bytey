@@ -32,6 +32,7 @@ else
     endif
     ifeq ($(detected_OS),Darwin)
         CFLAGS += -D OSX
+    endif
     ifeq ($(detected_OS),FreeBSD)
         CFLAGS += -D FreeBSD
     endif
