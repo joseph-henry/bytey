@@ -72,7 +72,7 @@ jobs:
         if: contains(matrix.os, 'windows')
         uses: actions/upload-artifact@v2
         with:
-          name: bytey-${{ matrix.os }}.exe
+          name: bytey-${{ matrix.os }}
           path: bytey
   run-unix:
     needs: build-unix
@@ -100,12 +100,12 @@ jobs:
       - name: "download artifact"
         uses: actions/download-artifact@v2
         with:
-          name: bytey-${{ matrix.os }}.exe
-          path: bytey.exe
+          name: bytey-${{ matrix.os }}
+          path: bytey
       - name: "run"
         run: |
           dir
-          ./bytey.exe | grep nom
+          ./bytey | grep nom
   fuzz-linux:
     needs: run-unix
     strategy:
