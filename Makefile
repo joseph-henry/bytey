@@ -43,7 +43,7 @@ else
 		CFLAGS += -D OpenBSD
 	endif
 
-	PROCESSOR := $(shell uname -p)
+	PROCESSOR := $(shell uname -m)
 	ifeq ($(PROCESSOR),x86_64)
 		CFLAGS += -D AMD64
 	endif
