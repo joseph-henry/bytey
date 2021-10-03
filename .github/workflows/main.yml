@@ -101,7 +101,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: bytey-${{ matrix.os }}.exe
-          path: .
+          path: bytey.exe
       - name: "run"
         run: |
           dir
