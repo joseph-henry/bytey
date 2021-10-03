@@ -23,7 +23,7 @@ jobs:
     needs: commit-lint
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-20.04, macos-11 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
@@ -50,7 +50,7 @@ jobs:
     needs: build-unix
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
+        os: [ ubuntu-20.04, macos-11 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: "download artifact"
