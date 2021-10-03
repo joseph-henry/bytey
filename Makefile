@@ -70,7 +70,7 @@ clean:
 	del byte.txt
 else
 build: main.c
-	@echo "building main.c on $(OSTYPE) on ${PROCESSOR_ARCHITECTURE}"
+	@echo "building main.c on $(OSTYPE) on ${PROCESSOR}"
 	@echo "CC = $(CC)"
 	@echo "CCFLAGS = $(CCFLAGS)"
 	$(CC) $(CFLAGS) -o bytey main.c
