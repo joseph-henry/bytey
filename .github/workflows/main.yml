@@ -61,9 +61,11 @@ jobs:
           echo "env" ; env
           echo "pwd" ; pwd
           echo "dir" ; dir
+          echo "which clang" ; which clang
       - name: "make"
         run:  |
           make
+          dir
       - name: "file"
         run: |
           file ./bytey
