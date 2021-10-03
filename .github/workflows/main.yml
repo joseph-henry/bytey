@@ -39,13 +39,13 @@ jobs:
           make
       - name: "run"
         run: |
-          ./byte | grep nom
-          file ./byte
+          ./bytey | grep nom
+          file ./bytey
       - name: "upload artifact"
         uses: actions/upload-artifact@v2
         with:
-          name: byte-${{ matrix.os }}
-          path: byte
+          name: bytey-${{ matrix.os }}
+          path: bytey
   build-windows:
     needs: commit-lint
     strategy:
@@ -66,13 +66,13 @@ jobs:
           make
       - name: "file"
         run: |
-          file ./byte
+          file ./bytey
       - name: "upload artifact"
         if: contains(matrix.os, 'windows')
         uses: actions/upload-artifact@v2
         with:
           name: byte-${{ matrix.os }}.exe
-          path: byte.exe
+          path: bytey.exe
   run-unix:
     needs: build-unix
     strategy:
@@ -87,8 +87,8 @@ jobs:
           path: .
       - name: "run"
         run: |
-          chmod +x ./byte
-          ./byte | grep nom
+          chmod +x ./bytey
+          ./bytey | grep nom
   run-windows:
     needs: build-windows
     strategy:
@@ -99,11 +99,11 @@ jobs:
       - name: "download artifact"
         uses: actions/download-artifact@v2
         with:
-          name: byte-${{ matrix.os }}.exe
+          name: bytey-${{ matrix.os }}.exe
           path: .
       - name: "run"
         run: |
-          ./byte | grep nom
+          ./bytey | grep nom
   fuzz-linux:
     needs: run-unix
     strategy:
@@ -123,5 +123,5 @@ jobs:
         run: |
           #!/bin/bash
           set -euo pipefail ; IFS=$'\n\t'
-          chmod +x ./byte
-          zzuf -d -r0.001 -E/etc -E/usr/share file ./byte
+          chmod +x ./bytey
+          zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
