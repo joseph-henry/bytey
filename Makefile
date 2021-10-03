@@ -16,3 +16,7 @@ endif
 clean:
 	@echo "cleaning"
 	rm byte
+
+ifeq ($(WINDOWS),)
+	@echo "hello from windows"
+endif
