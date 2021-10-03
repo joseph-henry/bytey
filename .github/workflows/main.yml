@@ -46,6 +46,22 @@ jobs:
         with:
           name: bytey-${{ matrix.os }}
           path: bytey
+  run-unix:
+    needs: build-unix
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "download artifact"
+        uses: actions/download-artifact@v2
+        with:
+          name: bytey-${{ matrix.os }}
+          path: .
+      - name: "run"
+        run: |
+          chmod +x ./bytey
+          ./bytey | grep nom          
   build-windows:
     needs: commit-lint
     strategy:
@@ -67,29 +83,13 @@ jobs:
           dir
       - name: "file"
         run: |
-          file ./bytey
+          file ./bytey.exe
       - name: "upload artifact"
         if: contains(matrix.os, 'windows')
         uses: actions/upload-artifact@v2
         with:
-          name: bytey-${{ matrix.os }}
-          path: bytey
-  run-unix:
-    needs: build-unix
-    strategy:
-      matrix:
-        os: [ ubuntu-20.04 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: .
-      - name: "run"
-        run: |
-          chmod +x ./bytey
-          ./bytey | grep nom
+          name: bytey-${{ matrix.os }}.exe
+          path: bytey.exe
   run-windows:
     needs: build-windows
     strategy:
@@ -100,13 +100,12 @@ jobs:
       - name: "download artifact"
         uses: actions/download-artifact@v2
         with:
-          name: bytey-${{ matrix.os }}
+          name: bytey-${{ matrix.os }}.exe
           path: .
       - name: "run"
         run: |
           dir
-          Import-Module .\bytey
-          ./bytey | grep nom
+          ./bytey.exe | grep nom
   fuzz-linux:
     needs: run-unix
     strategy:
