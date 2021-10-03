@@ -1,7 +1,13 @@
 OSTYPE=$(shell uname -s)
 CC=clang
 
-WINDOWS := $(shell echo $(OSTYPE) | grep "MSYS_NT")
+ifdef OS
+	@echo "hello hello"
+	@echo "hello from $(OS)"
+else
+	@echo "hello hello"
+	@echo "hello from $(OS)"
+endif
 
 ifeq ($(OSTYPE),Linux)
 build: main.c
@@ -10,15 +16,8 @@ build: main.c
 else
 build: main.c
 	@echo "building main.c on $(OSTYPE)"
-	@echo "WINDOWS: $(WINDOWS)"
 	$(CC) -o bytey.exe main.c
 endif
 clean:
 	@echo "cleaning"
 	rm byte
-
-ifdef OS
-	@echo "hello from windows"
-else
-	@echo "hello from linux"
-endif
