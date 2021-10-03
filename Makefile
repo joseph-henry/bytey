@@ -17,6 +17,8 @@ clean:
 	@echo "cleaning"
 	rm byte
 
-ifeq ($(WINDOWS),)
+ifdef OS
 	@echo "hello from windows"
+else
+	@echo "hello from linux"
 endif
