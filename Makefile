@@ -2,9 +2,11 @@ OSTYPE=$(shell uname -s)
 CC=clang
 
 ifdef OS
+hello:
 	@echo "hello hello"
 	@echo "hello from $(OS)"
 else
+hello:
 	@echo "hello hello"
 	@echo "hello from $(OS)"
 endif
