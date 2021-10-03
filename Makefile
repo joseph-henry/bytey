@@ -15,20 +15,20 @@ else
 endif
 
 ifeq ($(detected_OS),Windows)
-	CCFLAGS += -D WIN32
+	CFLAGS += -D WIN32
 	ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
-		CCFLAGS += -D AMD64
+		CFLAGS += -D AMD64
 	else
 		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
-			CCFLAGS += -D AMD64
+			CFLAGS += -D AMD64
 		endif
 		ifeq ($(PROCESSOR_ARCHITECTURE),x86)
-			CCFLAGS += -D IA32
+			CFLAGS += -D IA32
 		endif
 	endif
 else
 	ifeq ($(detected_OS),Linux)
-		CCFLAGS += -D LINUX
+		CFLAGS += -D LINUX
 	endif
 	ifeq ($(detected_OS),Darwin)
 		CFLAGS += -D OSX
@@ -45,13 +45,13 @@ else
 
 	PROCESSOR := $(shell uname -p)
 	ifeq ($(PROCESSOR),x86_64)
-		CCFLAGS += -D AMD64
+		CFLAGS += -D AMD64
 	endif
 	ifneq ($(filter %86,$(PROCESSOR)),)
-		CCFLAGS += -D IA32
+		CFLAGS += -D IA32
 	endif
 	ifneq ($(filter arm%,$(PROCESSOR)),)
-		CCFLAGS += -D ARM
+		CFLAGS += -D ARM
 	endif
 endif
 
