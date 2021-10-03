@@ -1,7 +1,7 @@
 OSTYPE=$(shell uname -s)
 CC=clang
 
-WINDOWS := $(shell echo OSTYPE | grep $(OSTYPE))
+WINDOWS := $(shell echo $(OSTYPE) | grep "MSYS_NT")
 
 ifeq ($(OSTYPE),Linux)
 build: main.c
