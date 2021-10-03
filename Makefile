@@ -15,7 +15,7 @@ else
 endif
 
 ifeq ($(detected_OS),Windows)
-		CCFLAGS += -D WIN32
+	CCFLAGS += -D WIN32
 	ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
 		CCFLAGS += -D AMD64
 	else
