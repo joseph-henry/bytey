@@ -71,7 +71,7 @@ jobs:
         if: contains(matrix.os, 'windows')
         uses: actions/upload-artifact@v2
         with:
-          name: byte-${{ matrix.os }}.exe
+          name: bytey-${{ matrix.os }}.exe
           path: bytey.exe
   run-unix:
     needs: build-unix
