@@ -105,6 +105,7 @@ jobs:
       - name: "run"
         run: |
           dir
+          Import-Module .\bytey
           ./bytey | grep nom
   fuzz-linux:
     needs: run-unix
