@@ -1,14 +1,16 @@
 OSTYPE=$(shell uname -s)
-UNAME=$(shell uname -a)
 CC=clang
+
+WINDOWS := $(shell echo OSTYPE | grep $(OSTYPE))
 
 ifeq ($(OSTYPE),Linux)
 build: main.c
-	@echo "building main.c on $(OSTYPE)"
+	@echo "building main.c on $(OSTYPE)"       
 	$(CC) -o bytey main.c
 else
 build: main.c
-	@echo "building main.c on $(UNAME)"
+	@echo "building main.c on $(OSTYPE)"
+	@echo "WINDOWS: $(WINDOWS)"
 	$(CC) -o bytey.exe main.c
 endif
 clean:
