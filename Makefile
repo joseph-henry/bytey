@@ -15,7 +15,7 @@ else
 endif
 
 ifeq ($(detected_OS),Windows)
-	CCFLAGS += -D WIN32
+        CCFLAGS += -D WIN32
     ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
         CCFLAGS += -D AMD64
     else
@@ -61,20 +61,20 @@ endif
 
 ifeq ($(OS),Windows_NT)
 build: main.c
-	@echo "building main.c on $(OS)"
-	@echo "CC = $(CC)"
-	@echo "CCFLAGS = $(CCFLAGS)"
+        @echo "building main.c on $(OS)"
+        @echo "CC = $(CC)"
+        @echo "CCFLAGS = $(CCFLAGS)"
         $(CC) $(CFLAGS) -o bytey.exe main.c
 clean:
-	@echo "cleaning"
-	del byte.txt
+        @echo "cleaning"
+        del byte.txt
 else
 build: main.c
-	@echo "building main.c on $(OSTYPE)"
-	@echo "CC = $(CC)"
-	@echo "CCFLAGS = $(CCFLAGS)"
-	$(CC) $(CFLAGS) -o bytey main.c
+        @echo "building main.c on $(OSTYPE)"
+        @echo "CC = $(CC)"
+        @echo "CCFLAGS = $(CCFLAGS)"
+        $(CC) $(CFLAGS) -o bytey main.c
 clean:
-	@echo "cleaning"
-	rm byte
+        @echo "cleaning"
+        rm byte
 endif
