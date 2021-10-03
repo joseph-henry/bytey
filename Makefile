@@ -7,7 +7,7 @@ build: main.c
 	$(CC) -o bytey.exe main.c
 else
 build: main.c
-	@echo "building main.c on $(OS)"
+	@echo "building main.c on $(OSTYPE)"
 	$(CC) -o bytey main.c
 endif
 clean:
