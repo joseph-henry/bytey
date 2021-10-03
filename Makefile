@@ -63,7 +63,7 @@ ifeq ($(OS),Windows_NT)
 build: main.c	
 	@echo "building main.c on $(detected_OS) on ${PROCESSOR_ARCHITECTURE}"
 	@echo "CC: $(CC)"
-	@echo "CCFLAGS: $(CCFLAGS)"
+	@echo "CFLAGS: $(CFLAGS)"
 	$(CC) $(CFLAGS) -o bytey.exe main.c
 clean:
 	@echo "cleaning"
@@ -71,9 +71,8 @@ clean:
 else
 build: main.c
 	@echo "building main.c on $(detected_OS) on ${PROCESSOR}"
-	@echo "uname: $(shell uname -a)"
 	@echo "CC: $(CC)"
-	@echo "CCFLAGS: $(CCFLAGS)"
+	@echo "CFLAGS: $(CFLAGS)"
 	$(CC) $(CFLAGS) -o bytey main.c
 clean:
 	@echo "cleaning"
