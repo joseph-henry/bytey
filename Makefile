@@ -61,7 +61,7 @@ endif
 
 ifeq ($(OS),Windows_NT)
 build: main.c
-	@echo "building main.c on $(OS) on ${PROCESSOR_ARCHITECTURE}"
+	@echo "building main.c on $(detected_OS) on ${PROCESSOR_ARCHITECTURE}"
 	@echo "CC = $(CC)"
 	@echo "CCFLAGS = $(CCFLAGS)"
 	$(CC) $(CFLAGS) -o bytey.exe main.c
@@ -70,7 +70,7 @@ clean:
 	del byte.txt
 else
 build: main.c
-	@echo "building main.c on $(OSTYPE) on ${PROCESSOR}"
+	@echo "building main.c on $(detected_OS) on ${PROCESSOR}"
 	@echo "CC = $(CC)"
 	@echo "CCFLAGS = $(CCFLAGS)"
 	$(CC) $(CFLAGS) -o bytey main.c
