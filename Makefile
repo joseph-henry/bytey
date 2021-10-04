@@ -53,6 +53,10 @@ else
 	ifneq ($(filter arm%,$(PROCESSOR)),)
 		CFLAGS += -D ARM
 	endif
+	ifneq ($(filter s390%,$(PROCESSOR)),)
+		CFLAGS += -D s390x
+		CC=gcc
+	endif
 endif
 
 #
@@ -60,7 +64,7 @@ endif
 #
 
 ifeq ($(OS),Windows_NT)
-build: main.c	
+build: main.c
 	@echo "building main.c on $(detected_OS) on ${PROCESSOR_ARCHITECTURE}"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
@@ -76,5 +80,15 @@ build: main.c
 	$(CC) $(CFLAGS) -o bytey main.c
 clean:
 	@echo "cleaning"
-	rm byte
+	rm bytey
 endif
+
+docker:
+	@echo "build docker image"
+	docker buildx uninstall
+	docker build -t someara/bytey .
+
+docker-multiarch:
+	@echo "build docker multiarch images"
+	docker buildx install
+	docker buildx build --push --platform linux/386,linux/amd64,linux/arm/v7,linux/arm64/v8,linux/mips64le,linux/ppc64le,linux/s390x -t someara/bytey .

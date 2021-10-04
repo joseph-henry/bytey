@@ -1,15 +1,10 @@
-FROM ubuntu:20.04 as stage
+FROM debian:bullseye as stage
 
-RUN apt-get update -qq && apt-get -qq install make clang
+RUN apt-get -qq update && apt-get -qq install make clang gcc
 COPY . .
 RUN /usr/bin/make
-RUN echo $PWD
-RUN echo $PWD
-RUN ls -la .
 
-FROM ubuntu:20.04
-
+FROM debian:bullseye
 COPY --from=stage /bytey /usr/sbin
-
 CMD []
 ENTRYPOINT ["/usr/sbin/bytey"]
