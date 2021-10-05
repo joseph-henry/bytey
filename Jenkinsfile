@@ -10,6 +10,7 @@ pipeline {
         }
         stage('debug') {
             steps {
+                sh 'env'            
                 sh 'whoami'
                 sh 'pwd'
             }
