@@ -9,12 +9,12 @@ pipeline {
         }
         stage('debug') {
             steps {
-                sh 'w'
+                sh '/usr/bin/w'
             }
         }
         stage('debug more') {
             steps {
-                sh 'pwd ; ls -la'
+                sh '/usr/bin/pwd ; /usr/bin/ls -la'
             }
         }
     }
