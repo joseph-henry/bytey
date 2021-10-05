@@ -1,9 +1,9 @@
 name: make
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ dev ]
 jobs:
   commit-lint:
     runs-on: ubuntu-latest
@@ -23,7 +23,10 @@ jobs:
     needs: commit-lint
     strategy:
       matrix:
-        os: [ ubuntu-20.04, macos-11 ]
+        os: [
+        ubuntu-20.04,
+        # macos-11
+        ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
@@ -50,7 +53,10 @@ jobs:
     needs: build-unix
     strategy:
       matrix:
-        os: [ ubuntu-20.04, macos-11 ]
+        os: [
+        ubuntu-20.04,
+        # macos-11
+        ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: "download artifact"
@@ -106,24 +112,24 @@ jobs:
         run: |
           dir
           ./bytey.exe | grep nom
-  fuzz-linux:
-    needs: run-unix
-    strategy:
-      matrix:
-        os: [ ubuntu-20.04 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: .
-      - name: "install zzuf"
-        run: |
-          sudo apt-get -y install zzuf
-      - name: "run zzuf"
-        run: |
-          #!/bin/bash
-          set -euo pipefail ; IFS=$'\n\t'
-          chmod +x ./bytey
-          zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
+  # fuzz-linux:
+  #   needs: run-unix
+  #   strategy:
+  #     matrix:
+  #       os: [ ubuntu-20.04 ]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: "download artifact"
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: bytey-${{ matrix.os }}
+  #         path: .
+  #     - name: "install zzuf"
+  #       run: |
+  #         sudo apt-get -y install zzuf
+  #     - name: "run zzuf"
+  #       run: |
+  #         #!/bin/bash
+  #         set -euo pipefail ; IFS=$'\n\t'
+  #         chmod +x ./bytey
+  #         zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
