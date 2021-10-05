@@ -7,11 +7,16 @@ pipeline {
                 sh 'echo bytey bytey bytey' 
             }
         }
-        stage('make') {
+        stage('debug') {
             steps {
-                sh 'make' 
-                archiveArtifacts artifacts: 'bytey', fingerprint: true 
+                sh 'w'
             }
         }
+        # stage('make') {
+        #     steps {
+        #         sh 'make' 
+        #         archiveArtifacts artifacts: 'bytey', fingerprint: true 
+        #     }
+        # }        
     }
 }
