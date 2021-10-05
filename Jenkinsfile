@@ -7,9 +7,9 @@ pipeline {
                 sh 'echo byte byte byte'
                 sh 'echo byte byte byte'
                 sh 'echo byte byte byte'
-                sh 'echo byte byte byte' 
                 sh 'echo byte byte byte'
-                sh 'echo byte byte byte'                               
+                sh 'echo byte byte byte'
+                sh 'echo byte byte byte'
             }
         }
         stage('debug') {
