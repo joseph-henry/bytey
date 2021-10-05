@@ -9,7 +9,7 @@ pipeline {
         }
         stage('debug') {
             steps {
-                sh '/usr/bin/w'
+                sh 'echo got here'
             }
         }
         stage('debug more') {
