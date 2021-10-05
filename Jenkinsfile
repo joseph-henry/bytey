@@ -16,15 +16,5 @@ pipeline {
                 sh 'echo got here'
             }
         }
-        stage('debug more') {
-            steps {
-                sh '''
-                   env
-                   w
-                   pwd
-                   ls -la
-                '''
-            }
-        }
     }
 }
