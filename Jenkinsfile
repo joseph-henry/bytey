@@ -13,7 +13,7 @@ pipeline {
             steps {
                 sh 'echo got here'
                 sh 'echo got here'
-                sh 'echo got here'
+                sh 'whoami'
             }
         }
     }
