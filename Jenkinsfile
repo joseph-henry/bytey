@@ -12,11 +12,10 @@ pipeline {
                 sh 'w'
             }
         }
-        # stage('make') {
-        #     steps {
-        #         sh 'make' 
-        #         archiveArtifacts artifacts: 'bytey', fingerprint: true 
-        #     }
-        # }        
+        stage('debug more') {
+            steps {
+                sh 'pwd ; ls -la'
+            }
+        }
     }
 }
