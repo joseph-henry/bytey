@@ -7,7 +7,7 @@ pipeline {
                 sh 'echo bytey bytey bytey' 
             }
         }
-        stage('byte') {
+        stage('make') {
             steps {
                 sh 'make' 
                 archiveArtifacts artifacts: 'bytey', fingerprint: true 
