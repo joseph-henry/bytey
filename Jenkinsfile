@@ -8,7 +8,7 @@ pipeline {
                sh 'echo byte byte byte'            
             }
         }
-        stage('byte') {
+        stage('debug') {
             steps {
                 sh 'whoami'
                 sh 'pwd'
