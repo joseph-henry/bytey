@@ -9,30 +9,6 @@ pipeline {
                 sh 'pwd'
             }
         }
-        stage('build') {
-            parallel {
-                stage('one') {
-                    steps {
-                        sh "echo byte"
-                    }
-                }
-                stage('two') {
-                    steps {
-                        sh "echo byte"
-                    }
-                }
-                stage('three') {
-                    steps {
-                        sh "echo byte"
-                    }
-                }
-                stage('four') {
-                    steps {
-                        sh "make"
-                    }
-                }                
-            }
-        }
         stage('byte') {
             steps {
                sh 'echo byte byte byte'
@@ -40,6 +16,16 @@ pipeline {
                sh 'echo byte byte byte'
                sh 'echo byte byte byte'
                sh 'echo byte byte byte'
+            }
+        }        
+        stage('build') {
+            parallel {
+                stage('make') {
+                    steps {
+                        sh "make"
+                        sh "file bytey"
+                    }
+                }                
             }
         }
     }
