@@ -10,17 +10,28 @@ pipeline {
             }
         }
         stage('build') {
-            parallel(
-            a: {
-                sh 'whoami'
-            },
-            b: {
-                sh 'whoami'
+            parallel {
+                stage('one') {
+                    steps {
+                        sh "echo byte"
+                    }
+                }
+                stage('two') {
+                    steps {
+                        sh "echo byte"
+                    }
+                }
+                stage('three') {
+                    steps {
+                        sh "echo byte"
+                    }
+                }
+                stage('four') {
+                    steps {
+                        sh "echo byte"
+                    }
+                }                
             }
-            c: {
-                sh 'whoami'
-            }
-            )
         }
         stage('byte') {
             steps {
