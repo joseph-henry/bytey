@@ -28,7 +28,7 @@ pipeline {
                 }
                 stage('four') {
                     steps {
-                        sh "echo byte"
+                        sh "make"
                     }
                 }                
             }
