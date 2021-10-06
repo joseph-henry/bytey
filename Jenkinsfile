@@ -4,10 +4,23 @@ pipeline {
     stages {
         stage('debug') {
             steps {
-                sh 'env'            
+                sh 'env'
                 sh 'whoami'
                 sh 'pwd'
             }
+        }
+        stage('build') {
+            parallel(
+            a: {
+                sh 'whoami'
+            },
+            b: {
+                sh 'whoami'
+            }
+            c: {
+                sh 'whoami'
+            }
+            )
         }
         stage('byte') {
             steps {
