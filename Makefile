@@ -29,6 +29,7 @@ ifeq ($(detected_OS),Windows)
 else
 	ifeq ($(detected_OS),Linux)
 		CFLAGS += -D LINUX
+		LDFLAGS += -static
 	endif
 	ifeq ($(detected_OS),Darwin)
 		CFLAGS += -D OSX
@@ -77,7 +78,7 @@ build: main.c
 	@echo "building main.c on $(detected_OS) on ${PROCESSOR}"
 	@echo "CC: $(CC)"
 	@echo "CFLAGS: $(CFLAGS)"
-	$(CC) $(CFLAGS) -o bytey main.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o bytey main.c
 clean:
 	@echo "cleaning"
 	rm bytey
