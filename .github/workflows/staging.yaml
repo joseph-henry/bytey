@@ -61,12 +61,12 @@ jobs:
       - name: "docker build"
         run:  |
           export DOCKER_BUILDKIT=1
-          echo docker build --platform ${{ matrix.os }} -f Dockerfile.build --target export -t test . --output out/${platform}
-      # - name: "run"
-      #   run: |
-      #     file out/${platform}/bytey
-      # - name: "upload artifact"
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: bytey-${platform}
-      #     path: out/${platform}/bytey
+          echo docker build --platform ${{ matrix.os }} -f Dockerfile.build --target export -t test . --output out/${{ steps.set-variables.outputs.platform }}
+      - name: "run"
+        run: |
+          file out/${{ steps.set-variables.outputs.platform }}/bytey
+      - name: "upload artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: bytey-${{ steps.set-variables.outputs.platform }}
+          path: out/${{ steps.set-variables.outputs.platform }}/bytey
