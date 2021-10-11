@@ -95,6 +95,7 @@ jobs:
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
       - name: "set variables"
+        run: |
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
           echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
       # - name: set up qemu
