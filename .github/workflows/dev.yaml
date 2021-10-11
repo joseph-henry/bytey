@@ -68,19 +68,19 @@ jobs:
         run: |
           chmod +x ./bytey
           ./bytey | grep nom
-  build-linux-platform:
+  build-linux-platforms:
     needs: commit-lint
     strategy:
       matrix:
         platform: [
         386,
         amd64,
-        # arm/v5,
-        # arm/v7,
-        # aarch64,
-        # mips64le,
-        # ppc64le,
-        # s390x
+        arm/v5,
+        arm/v7,
+        aarch64,
+        mips64le,
+        ppc64le,
+        s390x
         ]
     runs-on: ubuntu-20.04
     steps:
@@ -98,10 +98,10 @@ jobs:
       - name: "make"
         run:  |
           export DOCKER_BUILDKIT=1
-          docker build --platform linux/${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ matrix.platorm }}
+          docker build --platform linux/${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ matrix.platform }}
       - name: "run"
         run: |
-          file out/${{ matrix.platform}}/bytey
+          file out/${{ matrix.platform }}/bytey
       - name: "upload artifact"
         uses: actions/upload-artifact@v2
         with:
