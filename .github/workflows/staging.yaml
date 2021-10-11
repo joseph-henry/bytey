@@ -70,3 +70,24 @@ jobs:
         with:
           name: bytey-${{ steps.set-variables.outputs.platform }}
           path: out/${{ steps.set-variables.outputs.platform }}/bytey
+  # fuzz-linux:
+  #   needs: run-unix
+  #   strategy:
+  #     matrix:
+  #       os: [ ubuntu-20.04 ]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: "download artifact"
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: bytey-${{ matrix.os }}
+  #         path: .
+  #     - name: "install zzuf"
+  #       run: |
+  #         sudo apt-get -y install zzuf
+  #     - name: "run zzuf"
+  #       run: |
+  #         #!/bin/bash
+  #         set -euo pipefail ; IFS=$'\n\t'
+  #         chmod +x ./bytey
+  #         zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey

@@ -22,10 +22,7 @@ jobs:
     needs: commit-lint
     strategy:
       matrix:
-        os: [
-          ubuntu-20.04,
-          macos-11
-        ]
+        os: [ ubuntu-latest, macos-11 ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
@@ -43,35 +40,11 @@ jobs:
         run: |
           ./bytey | grep nom
           file ./bytey
-      - name: "upload artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: bytey
-  run-unix:
-    needs: build-unix
-    strategy:
-      matrix:
-        os: [
-        ubuntu-20.04,
-        macos-11
-        ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: .
-      - name: "run"
-        run: |
-          chmod +x ./bytey
-          ./bytey | grep nom
   build-windows:
     needs: commit-lint
     strategy:
       matrix:
-        os: [ windows-2022 ]
+        os: [ windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
@@ -88,47 +61,6 @@ jobs:
           dir
       - name: "file"
         run: |
-          file ./bytey.exe
-      - name: "upload artifact"
-        if: contains(matrix.os, 'windows')
-        uses: actions/upload-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}.exe
-          path: bytey.exe
-  run-windows:
-    needs: build-windows
-    strategy:
-      matrix:
-        os: [ windows-2022 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}.exe
-          path: .
-      - name: "run"
-        run: |
           dir
+          file ./bytey.exe
           ./bytey.exe | grep nom
-  fuzz-linux:
-    needs: run-unix
-    strategy:
-      matrix:
-        os: [ ubuntu-20.04 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: .
-      - name: "install zzuf"
-        run: |
-          sudo apt-get -y install zzuf
-      - name: "run zzuf"
-        run: |
-          #!/bin/bash
-          set -euo pipefail ; IFS=$'\n\t'
-          chmod +x ./bytey
-          zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
