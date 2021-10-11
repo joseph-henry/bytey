@@ -61,7 +61,7 @@ jobs:
       - name: "docker build"
         run:  |
           export DOCKER_BUILDKIT=1
-          echo docker build --platform ${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ steps.set-variables.outputs.platform }}
+          docker build --platform ${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ steps.set-variables.outputs.platform }}
       - name: "run"
         run: |
           file out/${{ steps.set-variables.outputs.platform }}/bytey
