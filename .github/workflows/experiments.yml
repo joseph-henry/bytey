@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ dev ]
 jobs:
-  commit-lint:
+  commitlint:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -19,7 +19,7 @@ jobs:
           echo "message: ${message}"
           echo "${message}" | grep "^byte$" &>/dev/null;
   docker-setup:
-    needs: commit-lint
+    needs: commitlint
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
