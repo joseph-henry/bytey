@@ -93,29 +93,26 @@ jobs:
           echo "docker --version" ; docker --version
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
+          echo "matrix.os: ${{ matrix.os }}"
+          echo "platform: ${platform}"
+          platform="${matrix.os////-}"
+          echo "::set-env name=platform::${platform}"
       - name: set up qemu
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: "docker build"
-        env:
-          matrix_platform: ${{ matrix.platform }}
         run:  |
           export DOCKER_BUILDKIT=1
-          docker build --platform ${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${matrix_platform////-}
+          docker build --platform ${{ matrix.os }} -f Dockerfile.build --target export -t test . --output out/${platform}
       - name: "run"
-        env:
-          matrix_platform: ${{ matrix.platform }}
         run: |
-          platform="${matrix_platform////-}"          
-          file out/${matrix_platform////-}/bytey
+          file out/${platform}/bytey
       - name: "upload artifact"
         uses: actions/upload-artifact@v2
-        env:
-          matrix_platform: ${{ matrix.platform }}
         with:
-          name: bytey-${matrix_platform////-}
-          path: out/${matrix_platform////-}/bytey
+          name: bytey-${platform}
+          path: out/${platform}/bytey
   # build-windows:
   #   needs: commit-lint
   #   strategy:
