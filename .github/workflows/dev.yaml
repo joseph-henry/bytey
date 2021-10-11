@@ -104,11 +104,15 @@ jobs:
           export DOCKER_BUILDKIT=1
           docker build --platform ${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${matrix_platform////-}
       - name: "run"
+        env:
+          matrix_platform: ${{ matrix.platform }}
         run: |
           platform="${matrix_platform////-}"          
           file out/${matrix_platform////-}/bytey
       - name: "upload artifact"
         uses: actions/upload-artifact@v2
+        env:
+          matrix_platform: ${{ matrix.platform }}
         with:
           name: bytey-${matrix_platform////-}
           path: out/${matrix_platform////-}/bytey
