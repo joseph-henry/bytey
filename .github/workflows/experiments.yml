@@ -1,0 +1,41 @@
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+jobs:
+  commit-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: ensuring commit message is byte
+        run: |
+          #!/bin/bash
+          set -euo pipefail ; IFS=$'\n\t'
+          message=$(git log --format=%B -n 1 ${{ github.event.after }})
+          echo "message: ${message}"
+          echo "${message}" | grep "^byte$" &>/dev/null;
+  docker-setup:
+    needs: commit-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: "debug info"
+        run: |
+          echo "uname -a" ;  uname -a
+          echo "env" ; env
+          echo "pwd" ; pwd
+          echo "ls -la" ; ls -la
+      - name: set up qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: "commands"
+        run:  |
+          export DOCKER_BUILDKIT=1
+          docker ps -aq
+          docker images -a
