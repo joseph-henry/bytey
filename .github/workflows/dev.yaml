@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         os: [
-        ubuntu-20.04,
-        # macos-11
+          ubuntu-20.04,
+          macos-11
         ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -54,7 +54,7 @@ jobs:
       matrix:
         os: [
         ubuntu-20.04,
-        # macos-11
+        macos-11
         ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -67,21 +67,12 @@ jobs:
         run: |
           chmod +x ./bytey
           ./bytey | grep nom
-  build-linux-platforms:
+  build-windows:
     needs: commit-lint
     strategy:
       matrix:
-        platform: [
-          linux/386,
-          linux/amd64,
-          linux/arm/v5,
-          linux/arm/v7,
-          linux/aarch64,
-          linux/mips64le,
-          linux/ppc64le,
-          linux/s390x
-          ]
-    runs-on: ubuntu-20.04
+        os: [ windows-2022 ]
+        runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
@@ -90,97 +81,54 @@ jobs:
           echo "uname -a" ;  uname -a
           echo "env" ; env
           echo "pwd" ; pwd
-          echo "ls -la" ; ls -la
-          echo "docker --version" ; docker --version
-          echo "docker ps -a" ; docker ps -a
-          echo "docker images -a" ; docker images -a
-      - id: set-variables
-        name: "set variables"
+          echo "dir" ; dir
+      - name: "make"
+        run:  |
+          make
+          dir
+      - name: "file"
         run: |
-          echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
-          echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
-          echo "::set-output name=platform::$(echo $PLATFORM)"
-      - name: "access variables"
+          file ./bytey.exe
+      - name: "upload artifact"
+        if: contains(matrix.os, 'windows')
+        uses: actions/upload-artifact@v2
+        with:
+          name: bytey-${{ matrix.os }}.exe
+          path: bytey.exe
+  run-windows:
+    needs: build-windows
+    strategy:
+      matrix:
+        os: [ windows-2022 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "download artifact"
+        uses: actions/download-artifact@v2
+        with:
+          name: bytey-${{ matrix.os }}.exe
+          path: .
+      - name: "run"
         run: |
-          echo "platform: ${{ steps.set-variables.outputs.platform }}"
-      # - name: set up qemu
-      #   uses: docker/setup-qemu-action@v1
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1
-      # - name: "docker build"
-      #   run:  |
-      #     export DOCKER_BUILDKIT=1
-      #     docker build --platform ${{ matrix.os }} -f Dockerfile.build --target export -t test . --output out/${platform}
-      # - name: "run"
-      #   run: |
-      #     file out/${platform}/bytey
-      # - name: "upload artifact"
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: bytey-${platform}
-      #     path: out/${platform}/bytey
-  # build-windows:
-  #   needs: commit-lint
-  #   strategy:
-  #     matrix:
-  #       os: [ windows-2022 ]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: checkout repo
-  #       uses: actions/checkout@v2
-  #     - name: "debug info"
-  #       run: |
-  #         echo "uname -a" ;  uname -a
-  #         echo "env" ; env
-  #         echo "pwd" ; pwd
-  #         echo "dir" ; dir
-  #     - name: "make"
-  #       run:  |
-  #         make
-  #         dir
-  #     - name: "file"
-  #       run: |
-  #         file ./bytey.exe
-  #     - name: "upload artifact"
-  #       if: contains(matrix.os, 'windows')
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: bytey-${{ matrix.os }}.exe
-  #         path: bytey.exe
-  # run-windows:
-  #   needs: build-windows
-  #   strategy:
-  #     matrix:
-  #       os: [ windows-2022 ]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: "download artifact"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: bytey-${{ matrix.os }}.exe
-  #         path: .
-  #     - name: "run"
-  #       run: |
-  #         dir
-  #         ./bytey.exe | grep nom
-  # fuzz-linux:
-  #   needs: run-unix
-  #   strategy:
-  #     matrix:
-  #       os: [ ubuntu-20.04 ]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: "download artifact"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: bytey-${{ matrix.os }}
-  #         path: .
-  #     - name: "install zzuf"
-  #       run: |
-  #         sudo apt-get -y install zzuf
-  #     - name: "run zzuf"
-  #       run: |
-  #         #!/bin/bash
-  #         set -euo pipefail ; IFS=$'\n\t'
-  #         chmod +x ./bytey
-  #         zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
+          dir
+          ./bytey.exe | grep nom
+  fuzz-linux:
+    needs: run-unix
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "download artifact"
+        uses: actions/download-artifact@v2
+        with:
+          name: bytey-${{ matrix.os }}
+          path: .
+      - name: "install zzuf"
+        run: |
+          sudo apt-get -y install zzuf
+      - name: "run zzuf"
+        run: |
+          #!/bin/bash
+          set -euo pipefail ; IFS=$'\n\t'
+          chmod +x ./bytey
+          zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
