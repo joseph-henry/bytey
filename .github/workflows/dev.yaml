@@ -18,7 +18,7 @@ jobs:
           message=$(git log --format=%B -n 1 ${{ github.event.after }})
           echo "message: ${message}"
           echo "${message}" | grep "^byte$" &>/dev/null;
-  build-unix:
+  smoke-unix:
     needs: commit-lint
     strategy:
       matrix:
@@ -34,12 +34,11 @@ jobs:
           echo "pwd" ; pwd
           echo "ls -la" ; ls -la
       - name: "make"
-        run:  |
-          make
+        run: make
+      - name: "file"
+        run: file ./bytey
       - name: "run"
-        run: |
-          ./bytey | grep nom
-          file ./bytey
+        run: ./bytey | grep nom
   build-windows:
     needs: commit-lint
     strategy:
@@ -56,11 +55,8 @@ jobs:
           echo "pwd" ; pwd
           echo "dir" ; dir
       - name: "make"
-        run:  |
-          make
-          dir
+        run: make
       - name: "file"
-        run: |
-          dir
-          file ./bytey.exe
-          ./bytey.exe | grep nom
+        run: file ./bytey.exe
+      - name: "run"
+        run: ./bytey.exe | grep nom
