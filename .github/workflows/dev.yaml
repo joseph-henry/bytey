@@ -1,4 +1,4 @@
-name: make
+\1;314;0cname: make
 on:
   push:
     branches: [ dev ]
@@ -94,7 +94,7 @@ jobs:
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
-          echo "platform: ${MATRIX_PLATFORM}////-/}"
+          echo "platform: ${MATRIX_PLATFORM////-/}"
       # - name: set up qemu
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
