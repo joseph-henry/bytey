@@ -94,15 +94,15 @@ jobs:
           echo "docker --version" ; docker --version
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
-      - name: "set variables"
+      - id: set-variables
+        name: "set variables"
         run: |
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
           echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
           echo "::set-output name=platform::$(echo $PLATFORM)"
       - name: "access variables"
         run: |
-          echo "MATRIX_PLATFORM: ${MATRIX_PLATFORM}"
-          echo "PLATFORM: ${PLATFORM}"
+          echo "platform: ${{ steps.set-variavkes.outputs.platform }}"
       # - name: set up qemu
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
