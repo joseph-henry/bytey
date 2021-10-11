@@ -75,7 +75,6 @@ jobs:
         platform: [
         386,
         amd64,
-        armv5,
         armv7l,
         aarch64,
         mips64le,
