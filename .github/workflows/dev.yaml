@@ -98,6 +98,10 @@ jobs:
         run: |
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
           echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
+      - name: "echo variables"
+        run: |
+          echo "MATRIX_PLATFORM: ${MATRIX_PLATFORM}"
+          echo "PLATFORM: ${PLATFORM}"
       # - name: set up qemu
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
