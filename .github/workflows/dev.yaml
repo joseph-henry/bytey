@@ -33,13 +33,10 @@ jobs:
           echo "env" ; env
           echo "pwd" ; pwd
           echo "ls -la" ; ls -la
-      - name: "make"
-        run: make
-      - name: "file"
-        run: file ./bytey
-      - name: "run"
-        run: ./bytey | grep nom
-  build-windows:
+      - run: make        
+      - run: file ./bytey        
+      - run: ./bytey | grep ^nom$
+  smoke-windows:
     needs: commit-lint
     strategy:
       matrix:
@@ -50,13 +47,11 @@ jobs:
         uses: actions/checkout@v2
       - name: "debug info"
         run: |
-          echo "uname -a" ;  uname -a
+          echo "uname -a" ; uname -a
           echo "env" ; env
           echo "pwd" ; pwd
           echo "dir" ; dir
-      - name: "make"
-        run: make
-      - name: "file"
-        run: file ./bytey.exe
-      - name: "run"
-        run: ./bytey.exe | grep nom
+      - run: make
+      - run: file ./bytey.exe
+      - run: ./bytey.exe | grep ^nom$
+        
