@@ -1,5 +1,5 @@
 
-FROM debian:bullseye as stage
+FROM debian:11 as stage
 
 RUN apt-get -qq update && apt-get -qq install make clang gcc
 COPY . .

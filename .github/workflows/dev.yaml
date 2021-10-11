@@ -95,7 +95,11 @@ jobs:
           echo "docker --version" ; docker --version
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
-      - name: "make"
+      - name: set up qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: "docker build"
         run:  |
           export DOCKER_BUILDKIT=1
           docker build --platform linux/${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ matrix.platform }}
