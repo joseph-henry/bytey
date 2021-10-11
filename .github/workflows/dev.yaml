@@ -53,5 +53,4 @@ jobs:
           echo "dir" ; dir
       - run: make
       - run: file ./bytey.exe
-      - run: ./bytey.exe | grep ^nom$
-        
+      - run: ./bytey.exe | grep nom
