@@ -98,8 +98,8 @@ jobs:
         run: |
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
           echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
-          echo "::set-output platform::$(echo $PLATFORM)"
-      - name: "echo variables"
+          echo "::set-output name=platform::$(echo $PLATFORM)"
+      - name: "access variables"
         run: |
           echo "MATRIX_PLATFORM: ${MATRIX_PLATFORM}"
           echo "PLATFORM: ${PLATFORM}"
