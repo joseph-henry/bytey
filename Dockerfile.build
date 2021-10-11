@@ -1,0 +1,9 @@
+
+FROM debian:bullseye as stage
+
+RUN apt-get -qq update && apt-get -qq install make clang gcc
+COPY . .
+RUN /usr/bin/make
+
+FROM scratch AS export
+COPY --from=stage /bytey .
