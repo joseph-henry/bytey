@@ -94,7 +94,7 @@ jobs:
           echo "docker ps -a" ; docker ps -a
           echo "docker images -a" ; docker images -a
           echo "matrix.platform: ${{ matrix.platform }}"
-#          echo "platform: ${platform}"
+          echo "platform: ${{matrix.platform}////-}/"
       # - name: set up qemu
       #   uses: docker/setup-qemu-action@v1
       # - name: Set up Docker Buildx
