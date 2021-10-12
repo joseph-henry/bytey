@@ -101,7 +101,7 @@ build: main.c
 	$(CC) $(CFLAGS) -o bytey main.c
 clean:
 	@echo "cleaning"
-	@rm bytey
+	$(RM) bytey
 endif
 
 docker:
