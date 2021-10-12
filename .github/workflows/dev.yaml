@@ -24,7 +24,7 @@ jobs:
       matrix:
         os: [
         ubuntu-latest,
-        # macos-11
+        macos-11
         ]
     runs-on: ${{ matrix.os }}
     steps:
