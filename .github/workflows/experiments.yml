@@ -57,3 +57,6 @@ jobs:
           export DOCKER_BUILDKIT=1
           docker ps -aq
           docker images -a
+          which buildctl
+          buildctl --version
+
