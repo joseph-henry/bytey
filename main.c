@@ -2,11 +2,9 @@
 
 int main(int argc, char **argv) {
 
-   /*
    // Trigger undefined behaviour sanitizer
    int k = 0x7fffffff;
    k += argc;
-   */
 
    /*
    // Trigger address sanitizer (also memory sanitizer)
