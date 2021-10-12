@@ -1,0 +1,72 @@
+on:
+  push:
+    branches: [ staging ]
+  pull_request:
+    branches: [ staging ]
+jobs:
+  commit-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: ensuring commit message is byte
+        run: |
+          #!/bin/bash
+          set -euo pipefail ; IFS=$'\n\t'
+          message=$(git log --format=%B -n 1 ${{ github.event.after }})
+          echo "message: ${message}"
+          echo "${message}" | grep "^byte$" &>/dev/null;
+  build-linux-platforms:
+    needs: commit-lint
+    strategy:
+      matrix:
+        platform: [
+          linux/386,
+          linux/amd64,
+          linux/arm/v5,
+          linux/arm/v7,
+          linux/aarch64,
+          linux/mips64le,
+          linux/ppc64le,
+          linux/s390x
+          ]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: "debug info"
+        run: |
+          echo "uname -a" ;  uname -a
+          echo "env" ; env
+          echo "pwd" ; pwd
+          echo "ls -la" ; ls -la
+          echo "docker --version" ; docker --version
+          echo "docker ps -a" ; docker ps -a
+          echo "docker images -a" ; docker images -a
+      - id: set-variables
+        name: "set variables"
+        run: |
+          echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
+          echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
+          echo "::set-output name=platform::$(echo $PLATFORM)"
+      - name: "access variables"
+        run: |
+          echo "platform: ${{ steps.set-variables.outputs.platform }}"
+      - name: set up qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: "docker build"
+        run:  |
+          export DOCKER_BUILDKIT=1
+          docker build --platform ${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ steps.set-variables.outputs.platform }}
+      - name: "run"
+        run: |
+          file out/${{ steps.set-variables.outputs.platform }}/bytey
+      - name: "upload artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: bytey-${{ steps.set-variables.outputs.platform }}
+          path: out/${{ steps.set-variables.outputs.platform }}/bytey

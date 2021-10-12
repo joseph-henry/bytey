@@ -1,4 +1,3 @@
-name: make
 on:
   push:
     branches: [ dev ]
@@ -19,12 +18,12 @@ jobs:
           message=$(git log --format=%B -n 1 ${{ github.event.after }})
           echo "message: ${message}"
           echo "${message}" | grep "^byte$" &>/dev/null;
-  build-unix:
+  smoke-unix:
     needs: commit-lint
     strategy:
       matrix:
         os: [
-        ubuntu-20.04,
+        ubuntu-latest,
         # macos-11
         ]
     runs-on: ${{ matrix.os }}
@@ -120,68 +119,21 @@ jobs:
         run: |
           chmod +x ./bytey
           ./bytey | grep nom          
-  build-windows:
+  smoke-windows:
     needs: commit-lint
     strategy:
       matrix:
-        os: [ windows-2022 ]
+        os: [ windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
       - name: "debug info"
         run: |
-          echo "uname -a" ;  uname -a
+          echo "uname -a" ; uname -a
           echo "env" ; env
           echo "pwd" ; pwd
           echo "dir" ; dir
-      - name: "make"
-        run:  |
-          make
-          dir
-      - name: "file"
-        run: |
-          file ./bytey.exe
-      - name: "upload artifact"
-        if: contains(matrix.os, 'windows')
-        uses: actions/upload-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}.exe
-          path: bytey.exe
-  run-windows:
-    needs: build-windows
-    strategy:
-      matrix:
-        os: [ windows-2022 ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}.exe
-          path: .
-      - name: "run"
-        run: |
-          dir
-          ./bytey.exe | grep nom
-  # fuzz-linux:
-  #   needs: run-unix
-  #   strategy:
-  #     matrix:
-  #       os: [ ubuntu-20.04 ]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: "download artifact"
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: bytey-${{ matrix.os }}
-  #         path: .
-  #     - name: "install zzuf"
-  #       run: |
-  #         sudo apt-get -y install zzuf
-  #     - name: "run zzuf"
-  #       run: |
-  #         #!/bin/bash
-  #         set -euo pipefail ; IFS=$'\n\t'
-  #         chmod +x ./bytey
-  #         zzuf -d -r0.001 -E/etc -E/usr/share file ./bytey
+      - run: make
+      - run: file ./bytey.exe
+      - run: ./bytey.exe | grep nom
