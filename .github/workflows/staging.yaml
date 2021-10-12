@@ -36,24 +36,12 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v2
-      - name: "debug info"
-        run: |
-          echo "uname -a" ;  uname -a
-          echo "env" ; env
-          echo "pwd" ; pwd
-          echo "ls -la" ; ls -la
-          echo "docker --version" ; docker --version
-          echo "docker ps -a" ; docker ps -a
-          echo "docker images -a" ; docker images -a
       - id: set-variables
         name: "set variables"
         run: |
           echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
           echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
           echo "::set-output name=platform::$(echo $PLATFORM)"
-      - name: "access variables"
-        run: |
-          echo "platform: ${{ steps.set-variables.outputs.platform }}"
       - name: set up qemu
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -70,3 +58,37 @@ jobs:
         with:
           name: bytey-${{ steps.set-variables.outputs.platform }}
           path: out/${{ steps.set-variables.outputs.platform }}/bytey
+  run-linux-platforms:
+    needs: build-linux-platforms
+    strategy:
+      matrix:
+        platform: [
+          linux/386,
+          linux/amd64,
+          linux/arm/v5,
+          linux/arm/v7,
+          linux/aarch64,
+          linux/mips64le,
+          linux/ppc64le,
+          linux/s390x
+          ]
+    runs-on: ubuntu-20.04
+    steps:
+      - id: set-variables
+        name: "set variables"
+        run: |
+          echo "export MATRIX_PLATFORM=${{ matrix.platform }}" ; export MATRIX_PLATFORM=${{ matrix.platform }}
+          echo "export PLATFORM=${MATRIX_PLATFORM////-}" ; export PLATFORM=${MATRIX_PLATFORM////-}
+          echo "::set-output name=platform::$(echo $PLATFORM)"
+      - name: set up qemu
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: "download artifact"
+        uses: actions/download-artifact@v2
+        with:
+          name: bytey-${{ steps.set-variables.outputs.platform }}
+          path: .
+      - name: "run"
+        run: |
+          file bytey-${{ steps.set-variables.outputs.platform }}
