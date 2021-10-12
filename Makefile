@@ -1,5 +1,6 @@
 OSTYPE=$(shell uname -s)
 CC=clang
+CXX=clang++
 
 #
 # https://newbedev.com/os-detecting-makefile
@@ -61,6 +62,26 @@ else
 endif
 
 #
+# Sanitization
+#
+
+ifeq ($(CLANG_USAN),1)
+	CFLAGS+=-fsanitize=undefined
+	CFLAGS+=-fno-sanitize-recover=undefined # Cause program to terminate on UB detection
+endif
+
+ifeq ($(CLANG_ASAN),1)
+	CFLAGS+=-fsanitize=address
+	CFLAGS+=-fno-omit-frame-pointer # For nicer stack traces
+endif
+
+ifeq ($(CLANG_MSAN),1)
+	# Only available on Linux, NetBSD, and FreeBSD
+	CFLAGS+=-fsanitize=memory
+	CFLAGS+=-fno-omit-frame-pointer # For nicer stack traces
+endif
+
+#
 # Make
 #
 
@@ -81,7 +102,7 @@ build: main.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o bytey main.c
 clean:
 	@echo "cleaning"
-	rm bytey
+	$(RM) bytey
 endif
 
 docker:
