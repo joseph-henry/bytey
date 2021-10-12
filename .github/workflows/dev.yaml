@@ -68,7 +68,6 @@ jobs:
         run: |
           ./bytey | grep nom
           file ./bytey
-
       - name: "upload artifact"
         uses: actions/upload-artifact@v2
         with:
