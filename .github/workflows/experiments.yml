@@ -58,5 +58,5 @@ jobs:
           docker ps -aq
           docker images -a
           which buildctl
-          buildctl --version
+
 
