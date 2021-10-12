@@ -40,10 +40,10 @@ jobs:
         run:  |
           make clean
           make CLANG_USAN=1
-      - name: "make-asan"
-        run:  |
-          make clean
-          make CLANG_ASAN=1
+      # - name: "make-asan"
+      #   run:  |
+      #     make clean
+      #     make CLANG_ASAN=1
       - name: "make-msan"
         run:  |
           make clean
