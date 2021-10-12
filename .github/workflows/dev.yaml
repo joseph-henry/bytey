@@ -66,58 +66,8 @@ jobs:
           make
       - name: "run"
         run: |
+          file ./bytey          
           ./bytey | grep nom
-          file ./bytey
-      - name: "upload artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: bytey
-  build-linux-platform:
-    needs: commit-lint
-    strategy:
-      matrix:
-        platform: [ 386, amd64, arm/v5, arm/v7, aarch64, mips64le, ppc64le, s390x ]
-    runs-on: ubuntu-20.04
-    steps:
-      - name: checkout repo
-        uses: actions/checkout@v2
-      - name: "debug info"
-        run: |
-          echo "uname -a" ;  uname -a
-          echo "env" ; env
-          echo "pwd" ; pwd
-          echo "ls -la" ; ls -la
-      - name: "make"
-        run:  |
-          docker build --platform linux/${{ matrix.platform }} -f Dockerfile.build --target export -t test . --output out/${{ matrix.platorm }}
-      - name: "run"
-        run: |
-          file out/${{ matrix.platform}}/bytey
-      - name: "upload artifact"
-        uses: actions/upload-artifact@v2
-        with:
-          name: bytey-${{ matrix.platform }}
-          path: out/${{ matrix.platform }}/bytey
-  run-unix:
-    needs: build-unix
-    strategy:
-      matrix:
-        os: [
-        ubuntu-20.04,
-        # macos-11
-        ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "download artifact"
-        uses: actions/download-artifact@v2
-        with:
-          name: bytey-${{ matrix.os }}
-          path: .
-      - name: "run"
-        run: |
-          chmod +x ./bytey
-          ./bytey | grep nom          
   smoke-windows:
     needs: commit-lint
     strategy:
