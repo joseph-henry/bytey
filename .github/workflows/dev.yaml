@@ -36,10 +36,14 @@ jobs:
           echo "env" ; env
           echo "pwd" ; pwd
           echo "ls -la" ; ls -la
-      - name: "make-usan"
-        run:  |
-          make clean
-          make CLANG_USAN=1
+      #- name: "make-fuzzer"
+      #  run:  |
+      #    make clean
+      #    make CLANG_FUZZER=1
+      #- name: "make-usan"
+      #  run:  |
+      #    make clean
+      #    make CLANG_USAN=1
       # - name: "make-asan"
       #   run:  |
       #     make clean

@@ -82,6 +82,15 @@ ifeq ($(CLANG_MSAN),1)
 endif
 
 #
+# Fuzzing
+#
+
+ifeq ($(CLANG_FUZZER),1)
+	CFLAGS+=-fsanitize=address,fuzzer -DCLANG_FUZZER=1
+	CFLAGS+=-fno-omit-frame-pointer # For nicer stack traces
+endif
+
+#
 # Make
 #
 
